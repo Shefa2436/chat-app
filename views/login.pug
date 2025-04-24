@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .login-container
+    h1 Вход
+
+    form(method="POST", action="/users/login", class="form-box")
+      .form-group
+        label(for="username") Потребителско име
+        input(type="text", name="username", placeholder="Въведи потребителско име", required, class="input")
+
+      .form-group
+        label(for="password") Парола
+        input(type="password", name="password", placeholder="Въведи парола", required, class="input")
+
+      .form-actions
+        button(type="submit", class="btn-primary") Вход
+
+    p(class="text-center")
+      | Нямате акаунт? 
+      a(href="/users/register") Регистрация
