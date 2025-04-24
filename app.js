@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Тестов рут
 app.get('/', (req, res) => {
-  res.send('✅ Server running with SQLite sessions!');
+  res.redirect('/login');
 });
 
 app.use('/', indexRouter);
