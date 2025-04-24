@@ -24,11 +24,20 @@ app.use(cookieParser());
 
 // Сесии, съхранявани в SQLite
 app.use(session({
-  store: new SQLiteStore({ db: 'sessions.sqlite', dir: '/tmp' }),
+  store: new SQLiteStore({
+    db: 'sessions.sqlite',
+    dir: path.join(__dirname, 'var', 'db')
+  }),
   secret: process.env.SESSION_SECRET || 'supersecretkey',
   resave: false,
   saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24, // 1 ден
+    sameSite: 'lax',             // важно за redirect-и
+    secure: false                // ако си на https, сложи true
+  }
 }));
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -52,6 +61,12 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+const fs = require('fs');
+const dbPath = path.join(__dirname, 'var', 'db');
+if (!fs.existsSync(dbPath)) {
+  fs.mkdirSync(dbPath, { recursive: true });
+}
 
 // Стартирай сървъра
 const PORT = process.env.PORT || 3000;
