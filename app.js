@@ -24,7 +24,7 @@ app.use(cookieParser());
 
 // Сесии, съхранявани в SQLite
 app.use(session({
-  store: new SQLiteStore({ db: 'sessions.sqlite', dir: './var/db' }),
+  store: new SQLiteStore({ db: 'sessions.sqlite', dir: '/tmp' }),
   secret: process.env.SESSION_SECRET || 'supersecretkey',
   resave: false,
   saveUninitialized: false,
