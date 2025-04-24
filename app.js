@@ -1,5 +1,9 @@
 require('dotenv').config();
-
+const fs = require('fs');
+const dbPath = path.join(__dirname, 'var', 'db');
+if (!fs.existsSync(dbPath)) {
+  fs.mkdirSync(dbPath, { recursive: true });
+}
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -26,17 +30,18 @@ app.use(cookieParser());
 app.use(session({
   store: new SQLiteStore({
     db: 'sessions.sqlite',
-    dir: path.join(__dirname, 'var', 'db')
+    dir: dbPath
   }),
   secret: process.env.SESSION_SECRET || 'supersecretkey',
   resave: false,
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24, // 1 ден
-    sameSite: 'lax',             // важно за redirect-и
-    secure: false                // ако си на https, сложи true
+    sameSite: 'lax',
+    secure: false // ако не си на HTTPS
   }
 }));
+
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -62,11 +67,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-const fs = require('fs');
-const dbPath = path.join(__dirname, 'var', 'db');
-if (!fs.existsSync(dbPath)) {
-  fs.mkdirSync(dbPath, { recursive: true });
-}
+
 
 // Стартирай сървъра
 const PORT = process.env.PORT || 3000;

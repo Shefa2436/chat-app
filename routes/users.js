@@ -32,10 +32,12 @@ router.post('/login', (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.send('Грешна парола.');
 
-    req.session.user = user;
+    req.session.user = { id: user.id, username: user.username };
+    console.log('🔐 Влязъл потребител:', req.session.user); // <-- ВАЖНО!
     res.redirect('/');
   });
 });
+
 
 router.get('/logout', (req, res) => {
   req.session.destroy(() => {
