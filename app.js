@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Тестов рут
 app.get('/', (req, res) => {
-  res.redirect('/login');
+  res.redirect('/users/login');
 });
 
 app.use('/', indexRouter);
